@@ -34,29 +34,45 @@ public static class MapGenerator
     }
 
 
-    static public int[,] GenerateLabyrinth(int height, int width, int labyrinthLenght)
+    static public int[,] GenerateLabyrinth(int height, int width, int minLabyrinthLenght)
     {
         PathGenerator pathGenerator = new PathGenerator();
 
-        if (labyrinthLenght < height * width / 3)
+        if (minLabyrinthLenght < height * width / 3)
         {
             Debug.Log("Too low map size for such path.");
-            return _map;
         }
         else
         {
-            int currentLabyrinthLenght = 0;
+            PathMap currentPathMap;
             do
             {
-                PathMap pathMap = pathGenerator.GeneratePathMap(height, width);
-                currentLabyrinthLenght = pathMap.PathLength;
-            } while (currentLabyrinthLenght < labyrinthLenght);
+                currentPathMap = pathGenerator.GeneratePathMap(height, width);
+            } while (currentPathMap.PathLength < minLabyrinthLenght);
+            _map = GanerateIds(currentPathMap);
         }
         return _map;
     }
     static private int[,] GanerateIds(PathMap pathMap)
     {
-        return new int[0, 0];
+        int[,] idsMap = new int[pathMap.PathMapArray.GetLength(0), pathMap.PathMapArray.GetLength(1)];
+        for (int y = 0; y < pathMap.PathMapArray.GetLength(0); y++)
+        {
+            for (int x = 0; x < pathMap.PathMapArray.GetLength(1); x++)
+            {
+                if(pathMap.PathMapArray[y,x] == false)
+                {
+                    idsMap[y, x] = BlocksIds[Random.Range(0, BlocksIds.Length - 1)];
+                }
+                else
+                {
+                    idsMap[y, x] = PassId;
+                }
+            }
+        }
+        idsMap[pathMap.PathEnter.Y, pathMap.PathEnter.X] = EnterId;
+        idsMap[pathMap.PathExit.Y, pathMap.PathExit.X] = ExitId;
+        return idsMap;
     }
     static private void SetMapWall(Point wallPoint)
     {

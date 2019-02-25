@@ -1,139 +1,177 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 
 public class PathGenerator
 {
-    private Stack<Point> _subPassPointsPath = new Stack<Point>();
-    private Point _currentSubPassPoint = new Point(0,0);
-    private Point _currentPathExit = new Point(0,0); 
+    private Stack<Point> _keyPointsPath = new Stack<Point>();
+    private Point _currentExitPoint = new Point(0,0); 
     private int _currentPathLength = 0;
-    public PathMap GeneratePathMap(int height, int width)
+    public PathMap GeneratePathMap(int height, int width, int pathLength)
     {
-        PathMap pathMap = new PathMap(width, height);
-        Point[,] subPassPoints = GetSubPassPoints(pathMap.PathMapArray);
-        pathMap.PathEnter = GetPathEnter(subPassPoints);
-        SetPaths(ref pathMap, ref subPassPoints);
-        pathMap.PathExit = _currentPathExit;
-        pathMap.PathLength = _currentPathLength;
+        PathMap pathMap = new PathMap(width, height, pathLength);
+        pathMap.KeyPoints = GetKeyPoints(pathMap);
+        Point currentKeyPoint = GetRandomPoint(pathMap.KeyPoints);
+        pathMap.PathEnter = GetMapPoint(pathMap.KeyPoints, currentKeyPoint);
+        pathMap.PathMapArray = GetPathMapArray(pathMap, currentKeyPoint);
+        pathMap.PathExit = GetMapPoint(pathMap.KeyPoints, _currentExitPoint);
         return pathMap;
     }
-    private Point[,] GetSubPassPoints(bool[,] passArray)
+    private Point[,] GetKeyPoints(PathMap pathMap)
     {
-        Point[,] subPassPoints = new Point[(passArray.GetLength(1) - 1) / 2, (passArray.GetLength(0) - 1) / 2];
-        for (int row = 1; row < passArray.GetLength(0)-1; row++)
+        Point[,] keyPoints = pathMap.KeyPoints;
+        for (int row = 1; row < pathMap.PathMapArray.GetLength(0)-1; row+=2)
         {
-            for (int col = 1; col < passArray.GetLength(1)-1; col++)
+            for (int col = 1; col < pathMap.PathMapArray.GetLength(1)-1; col+=2)
             {
-                if(row%2 == 0 && col%2 == 0)
+                keyPoints[(row-1) / 2, (col-1) / 2] = new Point(col, row);
+            }
+        }
+        return keyPoints;
+    }
+    private Point GetRandomPoint(Point[,] pointsArray)
+    {
+        return new Point(
+                UnityEngine.Random.Range(0, pointsArray.GetLength(0)),
+                UnityEngine.Random.Range(0, pointsArray.GetLength(1))
+            );
+    }
+    private bool[,] GetPathMapArray(PathMap pathMap, Point currentKeyPoint)
+    {
+        bool[,] mapArray = pathMap.PathMapArray;
+        Point nextKeyPoint;
+        SetPass(pathMap.KeyPoints[currentKeyPoint.Y, currentKeyPoint.X], ref mapArray);
+        _keyPointsPath.Push(currentKeyPoint);
+        do
+        {
+            List<Point> nextKeyPoints = GetNextKeyPoints(pathMap, currentKeyPoint);
+            if (nextKeyPoints.Count > 0 && _currentPathLength < pathMap.PathLength)
+            {
+                nextKeyPoint = GetNextKeyPoint(nextKeyPoints);
+                _keyPointsPath.Push(nextKeyPoint);
+
+                SetPass(GetMapPoint(pathMap.KeyPoints, nextKeyPoint), ref mapArray);
+                SetPass(GetNextMapPoint(pathMap.KeyPoints, nextKeyPoint, currentKeyPoint), ref mapArray);
+                TrySetExitPoint(pathMap, nextKeyPoint);
+                currentKeyPoint = nextKeyPoint;
+            }
+            else if (_keyPointsPath.Count > 0)
+            {
+                if(_currentPathLength >= pathMap.PathLength)
                 {
-                    subPassPoints[row / 2, col / 2] = new Point(col, row);
+                    _keyPointsPath.Pop();
+                    _currentPathLength -= 2;
+                }
+                currentKeyPoint = _keyPointsPath.Pop();
+                _currentPathLength -= 2;
+            }
+            else
+            {
+                currentKeyPoint = GetPassableKey(pathMap);
+                if(currentKeyPoint == null)
+                {
+                    break;
+                }
+            }
+            Debug.Log(_keyPointsPath.Count + " - " + _currentPathLength);
+        } while (_keyPointsPath.Count > 0);
+        return mapArray;
+    }
+
+
+    private Point GetPassableKey(PathMap pathMap)
+    {
+        Point passableKeyPoint;
+        Point currentKeyPoint;
+        for (int y = 0; y < pathMap.KeyPoints.GetLength(0); y++)
+        {
+            for (int x = 0; x < pathMap.KeyPoints.GetLength(1); x++)
+            {
+                currentKeyPoint = new Point(x, y);
+                if (IsPassedKeyPoint(pathMap, currentKeyPoint))
+                {
+                    passableKeyPoint = currentKeyPoint;
                 }
             }
         }
-        return subPassPoints;
+        return passableKeyPoint;
     }
-    private Point GetPathEnter(Point[,] subPathPoints)
+    private void SetPass(Point point, ref bool[,] mapArray)
     {
-        _currentSubPassPoint = new Point(
-                Random.Range(0, subPathPoints.GetLength(0) - 1),
-                Random.Range(0, subPathPoints.GetLength(1) - 1)
-            );
-        _subPassPointsPath.Push(_currentSubPassPoint);
-        return subPathPoints[
-                _currentSubPassPoint.Y,
-                _currentSubPassPoint.X
-            ];
+        _currentPathLength ++;
+        mapArray[point.Y, point.X] = true;
     }
-    private void SetPaths( ref PathMap pathMap, ref Point[,] subPassPoints)
+    private Point GetNextMapPoint(Point[,] keyPoints, Point nextKeyPoint, Point currentKeyPoint)
     {
-        SetPass(ref pathMap, pathMap.PathEnter);
-        Point nextSubPassPoint;
-        do
+        Point currentMapPoint = GetMapPoint(keyPoints, currentKeyPoint);
+        Point nextMapPoint = GetMapPoint(keyPoints, nextKeyPoint);
+        return GetNextPoint(currentMapPoint, nextMapPoint);
+    }
+    private Point GetMapPoint(Point[,] keyPoints, Point keyPoint)
+    {
+        return keyPoints[keyPoint.Y, keyPoint.X];
+    }
+    private Point GetNextPoint(Point currentPoint, Point aimPoint)
+    {
+        int diffX = NormalizeValue(currentPoint.X - aimPoint.X);
+        int diffY = NormalizeValue(currentPoint.Y - aimPoint.Y);
+        return new Point(currentPoint.X - diffX, currentPoint.Y - diffY);
+    }
+    private int NormalizeValue(int diff)
+    {
+        if (diff != 0)
         {
-            List<Point> nextSubPassPoints = GetNextSubPassPoints(ref subPassPoints);
-            if (nextSubPassPoints.Count > 0)
-            {
-                nextSubPassPoint = GetNextSubPassPoint(nextSubPassPoints);
-                SetPass(ref pathMap, GetSubPassMapPoint(nextSubPassPoint, subPassPoints));
-                SetPass(ref pathMap, subPassPoints[_currentSubPassPoint.Y, _currentSubPassPoint.X]);
-                _subPassPointsPath.Push(nextSubPassPoint);
-                AddPathLength(ref pathMap, subPassPoints);
-            }
-            else if (_subPassPointsPath.Count > 0)
-            {
-                _currentSubPassPoint = _subPassPointsPath.Pop();
-                _currentPathLength -= 2;
-            }
-        } while (_subPassPointsPath.Count > 0);
-    }
-    private void SetPass(ref PathMap pathMap, Point point)
-    {
-        pathMap.PathMapArray[point.Y, point.X] = true;
-    }
-    private Point GetSubPassMapPoint(Point nextSubPassPoint, Point[,] subPassPoints)
-    {
-        Point subPassMapPoint = subPassPoints[_currentSubPassPoint.Y,_currentSubPassPoint.X];
-        if(_currentSubPassPoint.Y < nextSubPassPoint.Y)
-        {
-            subPassMapPoint.Y++; 
+            diff /= Math.Abs(diff);
         }
-        if(_currentSubPassPoint.Y > nextSubPassPoint.Y)
-        {
-            subPassMapPoint.Y--; 
-        }
-        if(_currentSubPassPoint.X < nextSubPassPoint.X)
-        {
-            subPassMapPoint.X++; 
-        }
-        if(_currentSubPassPoint.X > nextSubPassPoint.X)
-        {
-            subPassMapPoint.X--; 
-        }
-        return subPassMapPoint;
+        return diff;
     }
-    private Point GetNextSubPassPoint(List<Point> NextSubPassPoints)
+
+    private Point GetNextKeyPoint(List<Point> NextKeyPoints)
     {
-        return NextSubPassPoints[Random.Range(0,NextSubPassPoints.Count-1)];
+        return NextKeyPoints[UnityEngine.Random.Range(0,NextKeyPoints.Count)];
     }
-    private List<Point> GetNextSubPassPoints(ref Point[,] subPassPoints)
+    private List<Point> GetNextKeyPoints(PathMap pathMap, Point currentKeyPoint)
     {
-        List<Point> nextSubPassPoints = new List<Point>();
+        List<Point> nextKeyPoints = new List<Point>();
         for (int y = -1; y < 2; y++)
         {
             for (int x = -1; x < 2; x++)
             {
-                if(IsPassableVector(subPassPoints, _currentSubPassPoint, new Point(x,y)))
+                if(IsPassableVector(pathMap, currentKeyPoint, new Point(x,y)))
                 {
-                    nextSubPassPoints.Add(new Point(_currentSubPassPoint.X + x, _currentSubPassPoint.Y + y));
+                    nextKeyPoints.Add(new Point(currentKeyPoint.X + x, currentKeyPoint.Y + y));
                 }
             }
         }
-        return nextSubPassPoints;
+        return nextKeyPoints;
     }
-    private bool IsPassableVector(Point[,] subPassPoints, Point currentSubPassPoint,  Point passVector)
+    private bool IsPassableVector(PathMap pathMap, Point currentKeyPoint,  Point passVector)
     {
+        Point nextKeyPoint = new Point(currentKeyPoint.X + passVector.X, currentKeyPoint.Y + passVector.Y);
         return
             Mathf.Abs(passVector.Y) != Mathf.Abs(passVector.X) &&
-            (currentSubPassPoint.Y + passVector.Y > subPassPoints.GetLength(0) ||
-            currentSubPassPoint.X + passVector.X > subPassPoints.GetLength(1));
+            IsInPointsRange(nextKeyPoint, pathMap.KeyPoints)&&
+            !IsPassedKeyPoint(pathMap, nextKeyPoint);
     }
-    private bool IsInMapRange(Point point, bool[,] map)
+    private bool IsPassedKeyPoint(PathMap pathMap, Point nextKeyPoint)
     {
-        if (point.X > 0 && point.X < map.GetLength(1) && point.Y > 0 && point.Y < map.GetLength(0))
-        {
-            return true;
-        }
-        return false;
+        Point mapPoint = GetMapPoint(pathMap.KeyPoints, nextKeyPoint);
+        return pathMap.PathMapArray[mapPoint.Y, mapPoint.X] == true;
     }
-    private void AddPathLength(ref PathMap pathMap, Point[,] subPassPoints)
+    private bool IsInPointsRange(Point point, Point[,] points)
     {
-        _currentPathLength += 2;
-        if(_currentPathLength > pathMap.PathLength)
+        return point.X >= 0 &&
+        point.X < points.GetLength(1) &&
+        point.Y >= 0 &&
+        point.Y < points.GetLength(0);
+    }
+    private void TrySetExitPoint(PathMap pathMap, Point nextKeyPoint)
+    {
+        if(_currentPathLength >= pathMap.PathLength)
         {
-            pathMap.PathLength = _currentPathLength;
-            _currentPathExit = subPassPoints[_currentSubPassPoint.Y, _currentSubPassPoint.X];
+            _currentExitPoint = nextKeyPoint;
         }
     }
 }

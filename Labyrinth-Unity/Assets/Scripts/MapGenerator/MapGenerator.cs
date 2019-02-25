@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class MapGenerator
 {
-    static private int[,] _map;
+    static private int[,] _map = new int[0,0];
     static private int _labyrinthLength;
     static private int _passId = 0;
     public static int PassId { get => _passId; set => _passId = value; }
@@ -38,18 +38,14 @@ public static class MapGenerator
     {
         PathGenerator pathGenerator = new PathGenerator();
 
-        if (minLabyrinthLenght < height * width / 3)
+        if (minLabyrinthLenght > height * width / 4)
         {
-            Debug.Log("Too low map size for such path.");
+            Debug.Log("Too low map size ("+ height * width + " blocks) for such path ("+ minLabyrinthLenght + ").");
         }
         else
         {
-            PathMap currentPathMap;
-            do
-            {
-                currentPathMap = pathGenerator.GeneratePathMap(height, width);
-            } while (currentPathMap.PathLength < minLabyrinthLenght);
-            _map = GanerateIds(currentPathMap);
+            PathMap pathMap = pathGenerator.GeneratePathMap(height, width, minLabyrinthLenght);
+            _map = GanerateIds(pathMap);
         }
         return _map;
     }

@@ -70,14 +70,6 @@ public static class MapGenerator
         idsMap[pathMap.PathExit.Y, pathMap.PathExit.X] = ExitId;
         return idsMap;
     }
-    static private void SetMapWall(Point wallPoint)
-    {
-        SetMapBlock(wallPoint, BlocksIds[Random.Range(0, BlocksIds.Length - 1)]);
-    }
-    static private void SetMapBlock(Point blockPoint, int id)
-    {
-        _map[blockPoint.Y, blockPoint.X] = id;
-    }
     static private bool DefinedIdsExists(int[] blockIds)
     {
         for (int idNumber = 0; idNumber < blockIds.Length; idNumber++)

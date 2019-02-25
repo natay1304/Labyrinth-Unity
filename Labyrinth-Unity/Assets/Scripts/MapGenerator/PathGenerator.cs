@@ -7,7 +7,8 @@ using UnityEngine;
 public class PathGenerator
 {
     private Stack<Point> _keyPointsPath = new Stack<Point>();
-    private Point _currentExitPoint = new Point(0,0); 
+    private Point _exitPoint;
+    private bool _isExitExists = false; 
     private int _currentPathLength = 0;
     public PathMap GeneratePathMap(int height, int width, int pathLength)
     {
@@ -15,8 +16,8 @@ public class PathGenerator
         pathMap.KeyPoints = GetKeyPoints(pathMap);
         Point currentKeyPoint = GetRandomPoint(pathMap.KeyPoints);
         pathMap.PathEnter = GetMapPoint(pathMap.KeyPoints, currentKeyPoint);
-        pathMap.PathMapArray = GetPathMapArray(pathMap, currentKeyPoint);
-        pathMap.PathExit = GetMapPoint(pathMap.KeyPoints, _currentExitPoint);
+        pathMap.PathMapArray = GetPathMapArray(ref pathMap, currentKeyPoint);
+        pathMap.PathExit = _exitPoint;
         return pathMap;
     }
     private Point[,] GetKeyPoints(PathMap pathMap)
@@ -38,7 +39,7 @@ public class PathGenerator
                 UnityEngine.Random.Range(0, pointsArray.GetLength(1))
             );
     }
-    private bool[,] GetPathMapArray(PathMap pathMap, Point currentKeyPoint)
+    private bool[,] GetPathMapArray(ref PathMap pathMap, Point currentKeyPoint)
     {
         bool[,] mapArray = pathMap.PathMapArray;
         Point nextKeyPoint;
@@ -54,36 +55,28 @@ public class PathGenerator
 
                 SetPass(GetMapPoint(pathMap.KeyPoints, nextKeyPoint), ref mapArray);
                 SetPass(GetNextMapPoint(pathMap.KeyPoints, nextKeyPoint, currentKeyPoint), ref mapArray);
-                TrySetExitPoint(pathMap, nextKeyPoint);
+                
                 currentKeyPoint = nextKeyPoint;
             }
             else if (_keyPointsPath.Count > 0)
             {
-                if(_currentPathLength >= pathMap.PathLength)
+                if(_currentPathLength >= pathMap.PathLength && !_isExitExists)
                 {
+                    _exitPoint = GetMapPoint(pathMap.KeyPoints, currentKeyPoint);
+                    _isExitExists = true;
                     _keyPointsPath.Pop();
                     _currentPathLength -= 2;
                 }
                 currentKeyPoint = _keyPointsPath.Pop();
                 _currentPathLength -= 2;
             }
-            else
-            {
-                currentKeyPoint = GetPassableKey(pathMap);
-                if(currentKeyPoint == null)
-                {
-                    break;
-                }
-            }
-            Debug.Log(_keyPointsPath.Count + " - " + _currentPathLength);
         } while (_keyPointsPath.Count > 0);
         return mapArray;
     }
 
 
-    private Point GetPassableKey(PathMap pathMap)
+    private Point GetPassableKeyPoint(PathMap pathMap)
     {
-        Point passableKeyPoint;
         Point currentKeyPoint;
         for (int y = 0; y < pathMap.KeyPoints.GetLength(0); y++)
         {
@@ -92,11 +85,11 @@ public class PathGenerator
                 currentKeyPoint = new Point(x, y);
                 if (IsPassedKeyPoint(pathMap, currentKeyPoint))
                 {
-                    passableKeyPoint = currentKeyPoint;
+                    return currentKeyPoint;
                 }
             }
         }
-        return passableKeyPoint;
+        return currentKeyPoint;
     }
     private void SetPass(Point point, ref bool[,] mapArray)
     {
@@ -166,12 +159,5 @@ public class PathGenerator
         point.X < points.GetLength(1) &&
         point.Y >= 0 &&
         point.Y < points.GetLength(0);
-    }
-    private void TrySetExitPoint(PathMap pathMap, Point nextKeyPoint)
-    {
-        if(_currentPathLength >= pathMap.PathLength)
-        {
-            _currentExitPoint = nextKeyPoint;
-        }
     }
 }

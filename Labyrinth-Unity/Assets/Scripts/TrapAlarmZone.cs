@@ -6,7 +6,6 @@ using UnityEngine.Events;
 public class TrapAlarmZone : MonoBehaviour
 {
     public UnityEvent TriggerEvent;
-    
 
     private void OnTriggerEnter(Collider other)
     {

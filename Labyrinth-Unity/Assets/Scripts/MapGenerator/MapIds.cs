@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.MapGenerator
+namespace LabyrinthUnity.MapGenerator
 {
     public class MapIds
     {
@@ -22,7 +23,7 @@ namespace Assets.Scripts.MapGenerator
                 }
                 else
                 {
-                    Debug.Log("Pass Id is not setted. Value is not unique");
+                    throw new ArgumentException("Pass Id is not setted. Value is not unique ", "PassId");
                 }
             }
         }
@@ -43,7 +44,7 @@ namespace Assets.Scripts.MapGenerator
                 }
                 else
                 {
-                    Debug.Log("Enter Id is not setted. Value is not unique");
+                    throw new ArgumentException("EnterId is not setted. Value is not unique ", "EnterId");
                 }
             }
         }
@@ -64,14 +65,14 @@ namespace Assets.Scripts.MapGenerator
                 }
                 else
                 {
-                    Debug.Log("Exit Id is not setted. Value is not unique");
+                    throw new ArgumentException("ExitId is not setted. Value is not unique ", "ExitId");
                 }
             }
         }
 
 
         private readonly int _defaultBlockId = 3;
-        private int[] _blocksIds;
+        private int[] _blocksIds = new int[0];
         public int[] BlocksIds
         {
             get
@@ -94,10 +95,11 @@ namespace Assets.Scripts.MapGenerator
                 }
                 else
                 {
-                    Debug.Log("Blocks Ids list is not setted. It is empty or exists defined IDs");
+                    throw new ArgumentException("BlocksIds are not setted. Some ids are not unique ", "BlocksIds");
                 }
             }
         }
+
         private bool IsUniqueIdsArray(int[] testIdsArray, List<int>compareIdsList)
         {
             for (int idNumber = 0; idNumber < testIdsArray.Length; idNumber++)

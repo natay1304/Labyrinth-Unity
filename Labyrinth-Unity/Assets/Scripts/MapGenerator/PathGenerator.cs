@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
-namespace Assets.Scripts.MapGenerator
+namespace LabyrinthUnity.MapGenerator
 {
     internal class PathGenerator
     {
@@ -16,10 +16,11 @@ namespace Assets.Scripts.MapGenerator
         {
             PathMap pathMap = new PathMap(width, height, pathLength);
             pathMap.KeyPoints = GetKeyPoints(pathMap);
-            Point currentKeyPoint = GetRandomPoint(pathMap.KeyPoints);
-            pathMap.PathEnter = GetMapPoint(pathMap.KeyPoints, currentKeyPoint);
-            pathMap.PathMapArray = GetPathMapArray(ref pathMap, currentKeyPoint);
+            Point enterKeyPoint = GetRandomPoint(pathMap.KeyPoints);
+            pathMap.PathEnter = GetMapPoint(pathMap.KeyPoints, enterKeyPoint);
+            pathMap.PathMapArray = GetPathMapArray(ref pathMap, enterKeyPoint);
             pathMap.PathExit = _exitPoint;
+            pathMap.isExitExists = _isExitExists;
             return pathMap;
         }
 
@@ -48,58 +49,64 @@ namespace Assets.Scripts.MapGenerator
         {
             bool[,] mapArray = pathMap.PathMapArray;
             Point nextKeyPoint;
-            SetPass(pathMap.KeyPoints[currentKeyPoint.Y, currentKeyPoint.X], ref mapArray);
-            _keyPointsPath.Push(currentKeyPoint);
+            SetEnterPass(pathMap, ref currentKeyPoint, ref mapArray);
             do
             {
                 List<Point> nextKeyPoints = GetNextKeyPoints(pathMap, currentKeyPoint);
-                if (nextKeyPoints.Count > 0 && _currentPathLength < pathMap.PathLength)
+                if (IsExitPoint(pathMap))
+                {
+                    SetExit(pathMap, currentKeyPoint, ref nextKeyPoints);
+                }
+                if (IsImpasse(nextKeyPoints))
+                {
+                    currentKeyPoint = GetPreviousKeyPoint();
+                }
+                else
                 {
                     nextKeyPoint = GetNextKeyPoint(nextKeyPoints);
-                    _keyPointsPath.Push(nextKeyPoint);
-
-                    SetPass(GetMapPoint(pathMap.KeyPoints, nextKeyPoint), ref mapArray);
-                    SetPass(GetNextMapPoint(pathMap.KeyPoints, nextKeyPoint, currentKeyPoint), ref mapArray);
-
-                    currentKeyPoint = nextKeyPoint;
-                }
-                else if (_keyPointsPath.Count > 0)
-                {
-                    if (_currentPathLength >= pathMap.PathLength && !_isExitExists)
-                    {
-                        _exitPoint = GetMapPoint(pathMap.KeyPoints, currentKeyPoint);
-                        _isExitExists = true;
-                        _keyPointsPath.Pop();
-                        _currentPathLength -= 2;
-                    }
-                    currentKeyPoint = _keyPointsPath.Pop();
-                    _currentPathLength -= 2;
+                    SetPassesToKeyPoint(ref mapArray, pathMap, currentKeyPoint, nextKeyPoint);
+                    currentKeyPoint = GetCurrentKeyPoint(nextKeyPoint);
                 }
             } while (_keyPointsPath.Count > 0);
             return mapArray;
         }
-        
-        private Point GetPassableKeyPoint(PathMap pathMap)
+
+        private void SetEnterPass(PathMap pathMap, ref Point currentKeyPoint, ref bool[,] mapArray)
         {
-            Point currentKeyPoint;
-            for (int y = 0; y < pathMap.KeyPoints.GetLength(0); y++)
-            {
-                for (int x = 0; x < pathMap.KeyPoints.GetLength(1); x++)
-                {
-                    currentKeyPoint = new Point(x, y);
-                    if (IsPassedKeyPoint(pathMap, currentKeyPoint))
-                    {
-                        return currentKeyPoint;
-                    }
-                }
-            }
-            return currentKeyPoint;
+            SetPass(pathMap.KeyPoints[currentKeyPoint.Y, currentKeyPoint.X], ref mapArray);
+            _keyPointsPath.Push(currentKeyPoint);
         }
 
         private void SetPass(Point point, ref bool[,] mapArray)
         {
             _currentPathLength++;
             mapArray[point.Y, point.X] = true;
+        }
+
+        private bool IsImpasse(List<Point> nextKeyPoints)
+        {
+            return _keyPointsPath.Count > 0 && nextKeyPoints.Count == 0;
+        }
+
+        private bool IsExitPoint(PathMap pathMap)
+        {
+            return _currentPathLength >= pathMap.PathLength && !_isExitExists;
+        }
+
+        private void SetExit(PathMap pathMap, Point currentKeyPoint, ref List<Point> nextKeyPoints)
+        {
+            nextKeyPoints = new List<Point>();
+            _exitPoint = GetMapPoint(pathMap.KeyPoints, currentKeyPoint);
+            _isExitExists = true;
+            _keyPointsPath.Pop();
+            _currentPathLength -= 2;
+        }
+
+        private Point GetPreviousKeyPoint()
+        {
+            Point currentKeyPoint = _keyPointsPath.Pop();
+            _currentPathLength -= 2;
+            return currentKeyPoint;
         }
 
         private Point GetNextMapPoint(Point[,] keyPoints, Point nextKeyPoint, Point currentKeyPoint)
@@ -135,6 +142,25 @@ namespace Assets.Scripts.MapGenerator
             return NextKeyPoints[UnityEngine.Random.Range(0, NextKeyPoints.Count)];
         }
 
+        private bool[,] SetPassesToKeyPoint(
+                ref bool[,] mapArray, 
+                PathMap pathMap, 
+                Point currentKeyPoint, 
+                Point nextKeyPoint
+            )
+        {
+            SetPass(GetMapPoint(pathMap.KeyPoints, nextKeyPoint), ref mapArray);
+            SetPass(GetNextMapPoint(pathMap.KeyPoints, nextKeyPoint, currentKeyPoint), ref mapArray);
+            return mapArray;
+        }
+
+        private Point GetCurrentKeyPoint(Point nextKeyPoint)
+        {
+            Point currentKeyPoint;
+            _keyPointsPath.Push(nextKeyPoint);
+            currentKeyPoint = nextKeyPoint;
+            return currentKeyPoint;
+        }
         private List<Point> GetNextKeyPoints(PathMap pathMap, Point currentKeyPoint)
         {
             List<Point> nextKeyPoints = new List<Point>();

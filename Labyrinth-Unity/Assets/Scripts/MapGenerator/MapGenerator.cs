@@ -29,7 +29,6 @@ namespace LabyrinthUnity.MapGenerator
 
         public int[,] GenerateLabyrinth(int height, int width, int labyrinthLenght)
         {
-
             PathGenerator pathGenerator = new PathGenerator();
             int[,] map = new int[0,0];
             try
@@ -41,6 +40,7 @@ namespace LabyrinthUnity.MapGenerator
                     pathMap = pathGenerator.GeneratePathMap(height, width, labyrinthLenght);
                     attemptsNumber--;
                 } while (!pathMap.isExitExists && attemptsNumber >= 0);
+
                 if (!pathMap.isExitExists)
                 {
                     throw new ArgumentException(
@@ -78,8 +78,8 @@ namespace LabyrinthUnity.MapGenerator
                     }
                 }
             }
-            idsMap[pathMap.PathEnter.Y, pathMap.PathEnter.X] = mapIds.EnterId;
-            idsMap[pathMap.PathExit.Y, pathMap.PathExit.X] = mapIds.ExitId;
+            idsMap[pathMap.Enter.Y, pathMap.Enter.X] = mapIds.EnterId;
+            idsMap[pathMap.Exit.Y, pathMap.Exit.X] = mapIds.ExitId;
             return idsMap;
         }
     }

@@ -17,9 +17,9 @@ namespace LabyrinthUnity.MapGenerator
             PathMap pathMap = new PathMap(width, height, pathLength);
             pathMap.KeyPoints = GetKeyPoints(pathMap);
             Point enterKeyPoint = GetRandomPoint(pathMap.KeyPoints);
-            pathMap.PathEnter = GetMapPoint(pathMap.KeyPoints, enterKeyPoint);
+            pathMap.Enter = GetMapPoint(pathMap.KeyPoints, enterKeyPoint);
             pathMap.PathMapArray = GetPathMapArray(ref pathMap, enterKeyPoint);
-            pathMap.PathExit = _exitPoint;
+            pathMap.Exit = _exitPoint;
             pathMap.isExitExists = _isExitExists;
             return pathMap;
         }

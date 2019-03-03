@@ -17,8 +17,8 @@ namespace LabyrinthUnity.MapGenerator
         private Point[,] _keyPoints = new Point[0, 0];
         private int _pathLength = 0;
         private bool[,] _pathMap;
-        private Point _pathEnter = new Point(0, 0);
-        private Point _pathExit = new Point(0, 0);
+        private Point _enter = new Point(0, 0);
+        private Point _exit = new Point(0, 0);
         public bool isExitExists = false; 
         
 
@@ -27,24 +27,28 @@ namespace LabyrinthUnity.MapGenerator
             get => _pathLength;
             set
             {
-                if (_pathLength > _pathMap.GetLength(0) * _pathMap.GetLength(1) / 3)
+                if(IsValidPathLength(value))
                 {
-                    throw new ArgumentException(
-                        String.Format("Too low map size ({0} blocks) for such path ({1}).",
-                            _pathMap.GetLength(0) * _pathMap.GetLength(1),
-                            _pathLength
-                        ),
-                        "PathLength"
-                    );
+                    value = GetOdd(value);
+                    _pathLength = value;
                 }
-                else
-                {
-                    while (value % 2 == 0)
-                    {
-                        value += 1;
-                    }
-                }
-                _pathLength = value;
+            }
+        }
+        private bool IsValidPathLength(int pathLength)
+        {
+            if (pathLength > _pathMap.GetLength(0) * _pathMap.GetLength(1) / 3)
+            {
+                throw new ArgumentException(
+                    String.Format("Too low map size ({0} blocks) for such path ({1}).",
+                        _pathMap.GetLength(0) * _pathMap.GetLength(1),
+                        pathLength
+                    ),
+                    "PathLength"
+                );
+            }
+            else
+            {
+                return true;
             }
         }
 
@@ -53,51 +57,50 @@ namespace LabyrinthUnity.MapGenerator
             get => _pathMap;
             set
             {
-                if (PathMapArray.GetLength(1) < 5)
+                if (IsValidPathMapArray(value))
                 {
-                    throw new ArgumentException("Too low map width. Need width >= 5. " +
-                        "You entered " + PathMapArray.GetLength(1), "width");
+                    _pathMap = value;
                 }
-                if (PathMapArray.GetLength(0) < 5)
-                {
-                    throw new ArgumentException("Too low map height. Need width >= 5. " +
-                        "You entered " + PathMapArray.GetLength(0), "height");
-                }
-                _pathMap = value;
             }
         }
 
-        public Point PathEnter
+        private bool IsValidPathMapArray(bool[,] pathMapArray)
         {
-            get => _pathEnter;
+            if(pathMapArray.GetLength(0) < 5)
+            {
+                throw new ArgumentException("Too low map height. Need height >= 5. " +
+                    "You entered " + PathMapArray.GetLength(0), "height");
+            }
+            if (pathMapArray.GetLength(1) < 5)
+            {
+                throw new ArgumentException("Too low map width. Need width >= 5. " +
+                    "You entered " + PathMapArray.GetLength(1), "width");
+            }
+            return true;
+        }
+
+        public Point Enter
+        {
+            get => _enter;
             set
             {
-                if (value.X >= 0 && value.Y >= 0)
+                if (IsPositivePoint(value, new ArgumentException("Enter point may have only positive X and Y " +
+                        "You entered y=" + value.Y + " x=" + value.X, "Enter")))
                 {
-                    _pathEnter = value;
+                    _enter = value;
                 }
-                else
-                {
-                    throw new ArgumentException("PathEnter point may have only positive X and Y " +
-                        "You entered y=" + value.Y+" x=" + value.X, "PathEnter");
-                }
-
             }
         }
 
-        public Point PathExit
+        public Point Exit
         {
-            get => _pathExit;
+            get => _exit;
             set
             {
-                if (value.X >= 0 && value.Y >= 0)
+                if(IsPositivePoint(value, new ArgumentException("Exit point may have only positive X and Y " +
+                        "You entered y=" + value.Y + " x=" + value.X, "Exit")))
                 {
-                    _pathExit = value;
-                }
-                else
-                {
-                    throw new ArgumentException("PathExit point may have only positive X and Y " +
-                        "You entered y=" + value.Y + " x=" + value.X, "PathExit");
+                    _exit = value;
                 }
             }
         }
@@ -117,6 +120,18 @@ namespace LabyrinthUnity.MapGenerator
                         "Current KeyPoints.Lenght is: " + value.Length, "KeyPoints");
                 }
                 
+            }
+        }
+
+        private bool IsPositivePoint(Point point, ArgumentException exception)
+        {
+            if(point.X > 0 && point.Y > 0)
+            {
+                return true;
+            }
+            else
+            {
+                throw exception;
             }
         }
 

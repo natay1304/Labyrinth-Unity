@@ -1,30 +1,22 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using UnityEngine;
 
 namespace LabyrinthUnity.MapGenerator
 {
     public class MapGenerator
     {
-        private MapIds _mapIds = new MapIds();
-        public MapIds MapIds { get => _mapIds; set => _mapIds = value; }
+        public MapIds MapIds { get; private set; }
+        public int AttemptsNumber { get; private set; }
 
-        private int _attemptsNumber = 30;
-        public int AttemptsNumber
+        public MapGenerator(MapIds mapIds, int attemptsNumber = 30)
         {
-            get => _attemptsNumber;
-            set
-            {
-                if(value > 0)
-                {
-                    _attemptsNumber = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Too low AttemptsNumber count. It must be more then 0." +
-                        "Entered AttemptsNumber is: " + value, "AttemptsNumber");
-                }
-            }
+            if (attemptsNumber < 1)
+                throw new ArgumentException("Too low AttemptsNumber count. It must be more then 0." +
+                        "Entered attemptsNumber is: " + attemptsNumber, "attemptsNumber");
+            MapIds = mapIds;
+            AttemptsNumber = attemptsNumber;
         }
 
         public int[,] GenerateLabyrinth(int height, int width, int labyrinthLenght)
@@ -70,7 +62,7 @@ namespace LabyrinthUnity.MapGenerator
                 {
                     if (pathMap.PathMapArray[y, x] == false)
                     {
-                        idsMap[y, x] = mapIds.BlocksIds[UnityEngine.Random.Range(0, mapIds.BlocksIds.Length - 1)];
+                        idsMap[y, x] = mapIds.WallsIds.ElementAt(UnityEngine.Random.Range(0, mapIds.WallsIds.Count() - 1));
                     }
                     else
                     {

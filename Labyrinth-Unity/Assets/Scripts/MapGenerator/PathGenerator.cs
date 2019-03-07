@@ -12,12 +12,12 @@ namespace LabyrinthUnity.MapGenerator
         private bool _isExitExists = false;
         private int _currentPathLength = 0;
 
-        public PathMap GeneratePathMap(int height, int width, int pathLength)
+        public PathMap GeneratePathMap(int height, int width, int pathLength, Point? enterPoint = null)
         {
             PathMap pathMap = new PathMap(width, height, pathLength);
             pathMap.KeyPoints = GetKeyPoints(pathMap);
             Point enterKeyPoint = GetRandomPoint(pathMap.KeyPoints);
-            pathMap.Enter = GetMapPoint(pathMap.KeyPoints, enterKeyPoint);
+            pathMap.Enter = enterPoint.HasValue ? GetMapPoint(pathMap.KeyPoints, enterKeyPoint) : enterPoint.Value;
             pathMap.PathMapArray = GetPathMapArray(ref pathMap, enterKeyPoint);
             pathMap.Exit = _exitPoint;
             pathMap.isExitExists = _isExitExists;

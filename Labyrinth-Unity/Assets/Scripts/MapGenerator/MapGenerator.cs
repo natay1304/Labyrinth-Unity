@@ -19,7 +19,7 @@ namespace LabyrinthUnity.MapGenerator
             AttemptsNumber = attemptsNumber;
         }
 
-        public int[,] GenerateLabyrinth(int height, int width, int labyrinthLenght)
+        public int[,] GenerateLabyrinth(int height, int width, int labyrinthLenght, Point? enterPoint = null)
         {
             PathGenerator pathGenerator = new PathGenerator();
             int[,] map = new int[0,0];
@@ -29,7 +29,7 @@ namespace LabyrinthUnity.MapGenerator
                 int attemptsNumber = AttemptsNumber;
                 do
                 {
-                    pathMap = pathGenerator.GeneratePathMap(height, width, labyrinthLenght);
+                    pathMap = pathGenerator.GeneratePathMap(height, width, labyrinthLenght, enterPoint);
                     attemptsNumber--;
                 } while (!pathMap.isExitExists && attemptsNumber >= 0);
 

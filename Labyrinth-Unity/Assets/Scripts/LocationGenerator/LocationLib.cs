@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace LabyrinthUnity.LocationGenerator
 {
-    [CreateAssetMenu(menuName = "Location")]
+    [CreateAssetMenu(menuName = "LocationLib")]
     public class LocationLib : ScriptableObject
     {
-        public List<GameObject> Walls;
-        public GameObject Pass;
-        public GameObject Enter;
-        public GameObject Exit;
+        [SerializeField]
+        private List<GameObject> _blocksOrderByIds;
+
+        public List<GameObject> Blocks { get => _blocksOrderByIds;}
     }
 }

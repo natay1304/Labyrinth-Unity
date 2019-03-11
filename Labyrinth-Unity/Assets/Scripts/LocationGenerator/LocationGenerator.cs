@@ -18,6 +18,7 @@ namespace LabyrinthUnity.LocationGenerator
         }
         private void GenerateCells(LocationComponent location, LocationLib blocksLib, int[,] labyrinthMap)
         {
+            
 
         }
     }

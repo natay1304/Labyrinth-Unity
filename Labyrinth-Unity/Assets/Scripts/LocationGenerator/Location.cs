@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace LabyrinthUnity.LocationGenerator
 {
-    public class LocationComponent : MonoBehaviour
+    public class Location : MonoBehaviour
     {
         public LocationLib locationLib;
+        public Pass currentPass;
         [SerializeField]
         private Vector2 _exitCell;
         public Point ExitCell { get => VectorToPoint(_exitCell); set => _enterCell = PointToVector(value); }
@@ -19,7 +20,7 @@ namespace LabyrinthUnity.LocationGenerator
         [SerializeField]
         private int _enterToExitCells = 200;
         public int EnterToExitCells { get => _enterToExitCells; set => _enterToExitCells = value; }
-
+        
         private void OnValidate()
         {
             if(_sizeInCells.x < 5)
@@ -40,10 +41,16 @@ namespace LabyrinthUnity.LocationGenerator
             return new Vector2(point.X, point.Y);
         }
 
+        public void Regenerate()
+        {
+            LocationGenerator locationGenerator = new LocationGenerator();
+            locationGenerator.GenerateLocation(this);
+        }
+
         // Use this for initialization
         void Start()
         {
-            
+            Regenerate();
         }
 
         // Update is called once per frame

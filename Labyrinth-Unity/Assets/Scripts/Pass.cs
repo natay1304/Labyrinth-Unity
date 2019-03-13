@@ -8,16 +8,17 @@ using UnityEngine;
 public class Pass : MonoBehaviour
 {
     //[SerializeField]
-    private Location _location;
-    public Location Location { get => _location; set => _location = value; }
-
-    //[SerializeField]
-    private Vector2 _coordinates;
-    public Vector2 Coordinates { get => _coordinates; set => _coordinates = value; }
+    public Location Location;
+    
+    public Vector2 Coordinates;
 
     private void OnTriggerEnter(Collider other)
     {
-        _location.currentPass = this;
+        Debug.Log(other.GetComponent<Player>());
+        if(other.GetComponent<Player>() != null)
+        {
+            Location.currentPass = this;
+        }
     }
 
     // Start is called before the first frame update

@@ -8,7 +8,6 @@ namespace LabyrinthUnity.LocationGenerator
     {
         [SerializeField]
         private List<GameObject> _blocksOrderByIds;
-
         public List<GameObject> Blocks { get => _blocksOrderByIds;}
     }
 }

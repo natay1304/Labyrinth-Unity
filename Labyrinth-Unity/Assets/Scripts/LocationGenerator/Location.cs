@@ -6,21 +6,26 @@ namespace LabyrinthUnity.LocationGenerator
 {
     public class Location : MonoBehaviour
     {
-        public LocationLib locationLib;
-        public Pass currentPass;
         [SerializeField]
-        private Vector2 _exitCell;
-        public Point ExitCell { get => VectorToPoint(_exitCell); set => _enterCell = PointToVector(value); }
+        private Vector3 _cellSize = new Vector3(3,3,3);
+        public Vector3 CellSize { get => _cellSize; set => _cellSize = value; }
+
+        public LocationLib locationLib;
+
+        public Pass currentPass;
+
         [SerializeField]
         private Vector2 _enterCell;
         public Point EnterCell { get => VectorToPoint(_enterCell); set => _enterCell = PointToVector(value); }
+
         [SerializeField]
         private Vector2 _sizeInCells = new Vector2(30, 30);
         public Point SizeInCells { get => VectorToPoint(_sizeInCells); set => _enterCell = PointToVector(value); }
+
         [SerializeField]
         private int _enterToExitCells = 200;
         public int EnterToExitCells { get => _enterToExitCells; set => _enterToExitCells = value; }
-        
+
         private void OnValidate()
         {
             if(_sizeInCells.x < 5)
@@ -41,22 +46,27 @@ namespace LabyrinthUnity.LocationGenerator
             return new Vector2(point.X, point.Y);
         }
 
-        public void Regenerate()
+        public void Regenerate(Vector2? enterCell = null)
         {
+            if (enterCell.HasValue)
+                _enterCell = enterCell.Value;
+            Clear();
             LocationGenerator locationGenerator = new LocationGenerator();
             locationGenerator.GenerateLocation(this);
         }
-
-        // Use this for initialization
         void Start()
         {
             Regenerate();
         }
-
-        // Update is called once per frame
-        void Update()
+        private void Clear()
         {
-
+            if (transform.childCount > 0)
+            {
+                for (int childIndex = 0; childIndex < transform.childCount; childIndex++)
+                {
+                    Destroy(transform.GetChild(childIndex).gameObject);
+                }
+            }
         }
     }
 

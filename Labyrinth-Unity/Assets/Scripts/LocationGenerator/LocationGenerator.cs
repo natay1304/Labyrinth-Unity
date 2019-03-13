@@ -28,23 +28,32 @@ namespace LabyrinthUnity.LocationGenerator
                     SetBlock(location, labyrinthMap[y, x], currentPoint);
                 }
             }
-
         }
         private void SetBlock(Location location, int blockId, Point mapPosition)
         {
             SetBlockObject(location, 3, mapPosition, -1);
             SetBlockObject(location, blockId, mapPosition);
-            //SetCeilBlockObject(location, 3, mapPosition);
+            SetBlockObject(location, 3, mapPosition, 1);
         }
         private void SetBlockObject(Location location, int blockId, Point mapPosition, int positionZ = 0)
         {
             GameObject blockPrefab = location.locationLib.Blocks[blockId];
+            TrySetPass(location, blockPrefab, mapPosition);
             Vector3 worldPosition = new Vector3(
-                    location.transform.position.x + mapPosition.X * blockPrefab.transform.localScale.x,
-                    location.transform.position.z + (blockPrefab.transform.localScale.y * positionZ),
-                    location.transform.position.y + mapPosition.Y * blockPrefab.transform.localScale.y
+                    location.transform.position.x + mapPosition.X * location.CellSize.x,
+                    location.transform.position.z + (location.CellSize.z * positionZ),
+                    location.transform.position.y + mapPosition.Y * location.CellSize.y
                 );
             Object.Instantiate(blockPrefab, worldPosition, Quaternion.identity, location.transform);
+        }
+        private void TrySetPass(Location location, GameObject blockPrefab, Point mapPosition)
+        {
+            Pass pass = blockPrefab.GetComponent<Pass>();
+            if (pass != null)
+            {
+                pass.Location = location;
+                pass.Coordinates = new Vector2(mapPosition.X, mapPosition.Y);
+            }
         }
     }
 }

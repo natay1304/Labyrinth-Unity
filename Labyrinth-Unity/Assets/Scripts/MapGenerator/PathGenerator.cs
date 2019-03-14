@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
-namespace LabyrinthUnity.MapGenerator
+namespace LabyrinthUnity.MapGeneratorNS
 {
     internal class PathGenerator
     {

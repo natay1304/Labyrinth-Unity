@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Linq;
 using UnityEngine;
 
-namespace LabyrinthUnity.MapGenerator
+namespace LabyrinthUnity.MapGeneratorNS
 {
     public class MapGenerator
     {

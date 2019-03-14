@@ -14,39 +14,31 @@ namespace LabyrinthUnity.LocationGenerator
 
         public Pass currentPass;
 
-        [SerializeField]
-        private Vector2 _enterCell;
-        public Point EnterCell { get => VectorToPoint(_enterCell); set => _enterCell = PointToVector(value); }
+        private Vector2Int test;
 
         [SerializeField]
-        private Vector2 _sizeInCells = new Vector2(30, 30);
-        public Point SizeInCells { get => VectorToPoint(_sizeInCells); set => _enterCell = PointToVector(value); }
+        private Vector2Int _enterCell;
+        public Vector2Int EnterCell { get => _enterCell; set => _enterCell = value; }
+
+
+        [SerializeField]
+        private Vector2Int _sizeInCells = new Vector2Int(10, 10);
+        public Vector2Int SizeInCells { get => _sizeInCells; set => _sizeInCells = value; }
 
         [SerializeField]
         private int _enterToExitCells = 200;
-        public int EnterToExitCells { get => _enterToExitCells; set => _enterToExitCells = value; }
-
+        public int EnterToExitCells { get => _enterToExitCells; set => _enterToExitCells = GetValidPathLength(value); }
+        
         private void OnValidate()
         {
-            if(_sizeInCells.x < 5)
+            if (_sizeInCells.x < 5)
                 _sizeInCells.x = 5;
             if(_sizeInCells.y < 5)
                 _sizeInCells.y = 5;
-            if(_enterToExitCells > (_sizeInCells.x* _sizeInCells.y)/3)
-            {
-                _enterToExitCells = Mathf.FloorToInt((_sizeInCells.x * _sizeInCells.y) / 3);
-            }
-        }
-        private Point VectorToPoint(Vector2 vector2)
-        {
-            return new Point(Convert.ToInt32(vector2.y), Convert.ToInt32(vector2.y));
-        }
-        private Vector2 PointToVector(Point point)
-        {
-            return new Vector2(point.X, point.Y);
+            EnterToExitCells = _enterToExitCells;
         }
 
-        public void Regenerate(Vector2? enterCell = null)
+        public void Regenerate(Vector2Int? enterCell = null)
         {
             if (enterCell.HasValue)
                 _enterCell = enterCell.Value;
@@ -54,19 +46,31 @@ namespace LabyrinthUnity.LocationGenerator
             LocationGenerator locationGenerator = new LocationGenerator();
             locationGenerator.GenerateLocation(this);
         }
-        void Start()
+
+        public void Start()
         {
             Regenerate();
         }
+
         private void Clear()
         {
             if (transform.childCount > 0)
             {
-                for (int childIndex = 0; childIndex < transform.childCount; childIndex++)
-                {
-                    Destroy(transform.GetChild(childIndex).gameObject);
-                }
+                foreach (Transform child in transform)
+                    Destroy(child.gameObject);
             }
+        }
+
+        private int GetValidPathLength(int pathLength)
+        {
+            if (pathLength > SizeInCells.x * SizeInCells.y / 3)
+            {
+                pathLength = Mathf.FloorToInt((SizeInCells.x * SizeInCells.y) / 3);
+            }else if(pathLength < 5)
+            {
+                pathLength = 5;
+            }
+            return pathLength;
         }
     }
 

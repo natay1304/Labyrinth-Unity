@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using LabyrinthUnity.MapGenerator;
+using LabyrinthUnity.MapGeneratorNS;
 using System.Drawing;
 
 namespace LabyrinthUnity.LocationGenerator
@@ -8,14 +8,15 @@ namespace LabyrinthUnity.LocationGenerator
     {
         public void GenerateLocation(Location location)
         {
-            MapGenerator.MapGenerator mapGenerator = new MapGenerator.MapGenerator(new MapIds());
+            MapGenerator mapGenerator = new MapGenerator(new MapIds());
             int[,] labyrinthMap = mapGenerator.GenerateLabyrinth(
-                    location.SizeInCells, 
-                    location.EnterToExitCells, 
-                    location.EnterCell
+                    new Point(location.SizeInCells.x, location.SizeInCells.y), 
+                    location.EnterToExitCells,
+                    location.EnterCell == null ? null : (Point?)new Point(location.EnterCell.x, location.EnterCell.y)
                 );
             GenerateCells(location, labyrinthMap);
         }
+
         private void GenerateCells(Location location, int[,] labyrinthMap)
         {
             Point currentPoint = new Point();
@@ -29,12 +30,14 @@ namespace LabyrinthUnity.LocationGenerator
                 }
             }
         }
+
         private void SetBlock(Location location, int blockId, Point mapPosition)
         {
             SetBlockObject(location, 3, mapPosition, -1);
             SetBlockObject(location, blockId, mapPosition);
             SetBlockObject(location, 3, mapPosition, 1);
         }
+
         private void SetBlockObject(Location location, int blockId, Point mapPosition, int positionZ = 0)
         {
             GameObject blockPrefab = location.locationLib.Blocks[blockId];
@@ -46,13 +49,14 @@ namespace LabyrinthUnity.LocationGenerator
                 );
             Object.Instantiate(blockPrefab, worldPosition, Quaternion.identity, location.transform);
         }
+
         private void TrySetPass(Location location, GameObject blockPrefab, Point mapPosition)
         {
             Pass pass = blockPrefab.GetComponent<Pass>();
             if (pass != null)
             {
                 pass.Location = location;
-                pass.Coordinates = new Vector2(mapPosition.X, mapPosition.Y);
+                pass.Coordinates = new Vector2Int(mapPosition.X, mapPosition.Y);
             }
         }
     }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace LabyrinthUnity.LocationGenerator
 {
@@ -10,11 +8,9 @@ namespace LabyrinthUnity.LocationGenerator
         private Vector3 _cellSize = new Vector3(3,3,3);
         public Vector3 CellSize { get => _cellSize; set => _cellSize = value; }
 
-        public LocationLib locationLib;
+        public LocationLib LocationLib;
 
-        public Pass currentPass;
-
-        private Vector2Int test;
+        public Pass CurrentPass;
 
         [SerializeField]
         private Vector2Int _enterCell;
@@ -47,18 +43,15 @@ namespace LabyrinthUnity.LocationGenerator
             locationGenerator.GenerateLocation(this);
         }
 
-        public void Start()
+        private void Start()
         {
             Regenerate();
         }
 
         private void Clear()
         {
-            if (transform.childCount > 0)
-            {
-                foreach (Transform child in transform)
-                    Destroy(child.gameObject);
-            }
+            foreach (Transform child in transform)
+                Destroy(child.gameObject);
         }
 
         private int GetValidPathLength(int pathLength)
@@ -66,7 +59,8 @@ namespace LabyrinthUnity.LocationGenerator
             if (pathLength > SizeInCells.x * SizeInCells.y / 3)
             {
                 pathLength = Mathf.FloorToInt((SizeInCells.x * SizeInCells.y) / 3);
-            }else if(pathLength < 5)
+            }
+            else if(pathLength < 5)
             {
                 pathLength = 5;
             }

@@ -8,6 +8,6 @@ public class ExitLocation : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     { 
         if(other.GetComponent<Player>() != null)
-            Pass.Location.Regenerate(Pass.Location.currentPass.Coordinates);
+            Pass.Location.Regenerate(Pass.Location.CurrentPass.Coordinates);
     }
 }

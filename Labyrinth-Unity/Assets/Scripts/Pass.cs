@@ -14,6 +14,6 @@ public class Pass : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(other.GetComponent<Player>() != null)
-            Location.currentPass = this;
+            Location.CurrentPass = this;
     }
 }

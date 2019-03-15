@@ -40,7 +40,7 @@ namespace LabyrinthUnity.LocationGenerator
 
         private void SetBlockObject(Location location, int blockId, Point mapPosition, int positionZ = 0)
         {
-            GameObject blockPrefab = location.locationLib.Blocks[blockId];
+            GameObject blockPrefab = location.LocationLib.Blocks[blockId];
             TrySetPass(location, blockPrefab, mapPosition);
             Vector3 worldPosition = new Vector3(
                     location.transform.position.x + mapPosition.X * location.CellSize.x,

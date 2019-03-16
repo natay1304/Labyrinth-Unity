@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Linq;
 using UnityEngine;
 
-namespace LabyrinthUnity.MapGenerator
+namespace LabyrinthUnity.MapGeneratorNS
 {
     public class MapGenerator
     {
@@ -19,7 +19,11 @@ namespace LabyrinthUnity.MapGenerator
             AttemptsNumber = attemptsNumber;
         }
 
-        public int[,] GenerateLabyrinth(int height, int width, int labyrinthLenght)
+        public int[,] GenerateLabyrinth(int hidth, int width, int labyrinthLenght, Point? enterPoint = null)
+        {
+            return GenerateLabyrinth(new Point(width, hidth), labyrinthLenght, enterPoint);
+        }
+        public int[,] GenerateLabyrinth(Point labyrinthSize, int labyrinthLenght, Point? enterPoint = null)
         {
             PathGenerator pathGenerator = new PathGenerator();
             int[,] map = new int[0,0];
@@ -29,7 +33,7 @@ namespace LabyrinthUnity.MapGenerator
                 int attemptsNumber = AttemptsNumber;
                 do
                 {
-                    pathMap = pathGenerator.GeneratePathMap(height, width, labyrinthLenght);
+                    pathMap = pathGenerator.GeneratePathMap(labyrinthSize.Y, labyrinthSize.X, labyrinthLenght, enterPoint);
                     attemptsNumber--;
                 } while (!pathMap.isExitExists && attemptsNumber >= 0);
 
@@ -37,7 +41,7 @@ namespace LabyrinthUnity.MapGenerator
                 {
                     throw new ArgumentException(
                         String.Format("Too low map size ({0} blocks) for such labyrinthLenght ({1}).",
-                            height * width,
+                            labyrinthSize.Y * labyrinthSize.X,
                             labyrinthLenght
                         ),
                         "labyrinthLenght"

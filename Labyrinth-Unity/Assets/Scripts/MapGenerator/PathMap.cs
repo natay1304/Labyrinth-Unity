@@ -2,7 +2,7 @@
 using System.Drawing;
 using UnityEngine;
 
-namespace LabyrinthUnity.MapGenerator
+namespace LabyrinthUnity.MapGeneratorNS
 {
     internal class PathMap
     {

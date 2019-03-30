@@ -8,7 +8,8 @@ public class PlayerNotes : ScriptableObject
 {
     [SerializeField] private NotesList _notesList;
     private List<int> _foundNotesNombers;
-    public List<int> GetFoundNotesID() => _foundNotesNombers;
+
+    public IEnumerable<int> GetFoundNotesID() => _foundNotesNombers;
 
     void Awake()
     {
@@ -66,7 +67,7 @@ public class PlayerNotes : ScriptableObject
         SaveFoundNotes();
     }
 
-    public List<NoteData> GetFoundNotes()
+    public IEnumerable<NoteData> GetFoundNotes()
     {
         List<NoteData> notes = new List<NoteData>();
         for (int i = 0; i < _foundNotesNombers.Count; i++)

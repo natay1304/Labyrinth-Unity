@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Linq;
 
 public class NotesSaveDemonstration : MonoBehaviour
@@ -7,26 +6,21 @@ public class NotesSaveDemonstration : MonoBehaviour
     [SerializeField] private NotesList _notesList;
     [SerializeField] private PlayerNotes _playerNotes;
 
-    private List<int> _foundNotesNombers;
-    private void Awake()
-    {
-        _foundNotesNombers = _playerNotes.GetFoundNotesID();
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            if (_foundNotesNombers.Count == 0)
+            if (_playerNotes.GetFoundNotesID().Count() == 0)
             {
                 Debug.Log("Ни одной записки не найдено");
             }
             else
             {
                 string notesInfo = "";
-                for (int i = 0; i < _foundNotesNombers.Count; i++)
+
+                foreach (int number in _playerNotes.GetFoundNotesID())
                 {
-                    notesInfo += "Записка №" + _notesList.GetNotes().FirstOrDefault(x => x.Number == _foundNotesNombers[i]).Number + ". ";
+                    notesInfo += "Записка №" + _notesList.GetNotes().FirstOrDefault(x => x.Number == number).Number + ". ";
                 }
                 Debug.Log(notesInfo);
             }

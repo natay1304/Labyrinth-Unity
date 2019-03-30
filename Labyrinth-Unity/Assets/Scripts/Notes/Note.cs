@@ -3,8 +3,8 @@
 public class Note : MonoBehaviour
 {
     [SerializeField] private PlayerNotes _playerNotes;
-
     [SerializeField] private int _noteNumber;
+
     public int NoteNumer => _noteNumber;
 
     private void OnTriggerEnter(Collider other)

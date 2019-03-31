@@ -16,9 +16,9 @@ public class NotesSaveDemonstration : MonoBehaviour
             else
             {
                 string notesInfo = "";
-                foreach (NoteData number in _playerNotes.GetFoundNotes())
+                foreach (NoteData note in _playerNotes.GetFoundNotes())
                 {
-                    notesInfo += "Записка №" + number.Number + ". ";
+                    notesInfo += "Записка №" + note.Number + ". ";
                 }
 
                 Debug.Log(notesInfo);

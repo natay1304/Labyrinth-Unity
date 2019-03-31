@@ -104,3 +104,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d66d77bd86ccc45ad7f3f2fd0c29cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerNotes: {fileID: 11400000, guid: 4753f738be9fbe047adc1a1476f83a48, type: 2}
+  _notesList: {fileID: 11400000, guid: 862555cc977d8ca48984ad3668486804, type: 2}
+  _noteNumber: 0

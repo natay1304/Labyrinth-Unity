@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 594ba52fe76bc9749a1bbd9c00ba8f6d, type: 3}
-  m_Name: Notes List
+  m_Name: NotesList
   m_EditorClassIdentifier: 
   _notes:
   - {fileID: 11400000, guid: c4628b9f4830c8247b720fb48ff69304, type: 2}

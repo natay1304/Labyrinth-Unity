@@ -3,6 +3,7 @@
 public class Note : MonoBehaviour
 {
     [SerializeField] private PlayerNotes _playerNotes;
+    [SerializeField] private NotesList _notesList;
     [SerializeField] private int _noteNumber;
 
     public int NoteNumer => _noteNumber;
@@ -15,5 +16,10 @@ public class Note : MonoBehaviour
             _playerNotes.AddFoundNote(_noteNumber);
             Destroy(gameObject);
         }
+    }
+
+    public NoteData GetNoteData()
+    {
+        return _notesList.GetNote(_noteNumber);
     }
 }

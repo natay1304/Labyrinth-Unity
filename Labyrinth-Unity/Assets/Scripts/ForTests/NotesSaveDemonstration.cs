@@ -3,25 +3,24 @@ using System.Linq;
 
 public class NotesSaveDemonstration : MonoBehaviour
 {
-    [SerializeField] private NotesList _notesList;
     [SerializeField] private PlayerNotes _playerNotes;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            if (_playerNotes.GetFoundNotesID().Count() == 0)
+            if (_playerNotes.GetFoundNotes().Count() == 0)
             {
                 Debug.Log("Ни одной записки не найдено");
             }
             else
             {
                 string notesInfo = "";
-
-                foreach (int number in _playerNotes.GetFoundNotesID())
+                foreach (NoteData number in _playerNotes.GetFoundNotes())
                 {
-                    notesInfo += "Записка №" + _notesList.GetNotes().FirstOrDefault(x => x.Number == number).Number + ". ";
+                    notesInfo += "Записка №" + number.Number + ". ";
                 }
+
                 Debug.Log(notesInfo);
             }
         }

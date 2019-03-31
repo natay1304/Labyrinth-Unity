@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 [CreateAssetMenu(menuName = "Notes/Player Notes")]
 public class PlayerNotes : ScriptableObject
 {
     [SerializeField] private NotesList _notesList;
     private List<int> _foundNotesNombers;
-
-    public IEnumerable<int> GetFoundNotesID() => _foundNotesNombers;
 
     void Awake()
     {
@@ -42,7 +39,7 @@ public class PlayerNotes : ScriptableObject
 
         for (int i = 0; i < _foundNotesNombers.Count; i++)
         {
-            loadString += $"{_notesList.GetNotes().FirstOrDefault(x => x.Number == _foundNotesNombers[i]).Number},";
+            loadString += $"{_notesList.GetNote(_foundNotesNombers[i]).Number},";
         }
         loadString = loadString.Remove(loadString.Length - 1);
 
@@ -72,7 +69,7 @@ public class PlayerNotes : ScriptableObject
         List<NoteData> notes = new List<NoteData>();
         for (int i = 0; i < _foundNotesNombers.Count; i++)
         {
-            notes.Add(_notesList.GetNotes().FirstOrDefault(x => x.Number == _foundNotesNombers[i]));
+            notes.Add(_notesList.GetNote(_foundNotesNombers[i]));
         }
         return notes;
     }

@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6d470abd7963a94cb51b131907b8069, type: 3}
-  m_Name: Player Notes
+  m_Name: PlayerNotes
   m_EditorClassIdentifier: 
   _notesList: {fileID: 11400000, guid: 862555cc977d8ca48984ad3668486804, type: 2}

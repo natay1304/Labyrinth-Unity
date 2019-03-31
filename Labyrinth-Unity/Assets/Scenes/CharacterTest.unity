@@ -219,7 +219,7 @@ PrefabInstance:
     - target: {fileID: 5639288886366125788, guid: 5cc9ae499a9987f4998d347c79341c66,
         type: 3}
       propertyPath: m_Name
-      value: NoteSkin (2)
+      value: NoteSkin2
       objectReference: {fileID: 0}
     - target: {fileID: 5639288886366125787, guid: 5cc9ae499a9987f4998d347c79341c66,
         type: 3}
@@ -287,6 +287,12 @@ PrefabInstance:
       propertyPath: _noteNumber
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2260257303478003534, guid: 5cc9ae499a9987f4998d347c79341c66,
+        type: 3}
+      propertyPath: _notesList
+      value: 
+      objectReference: {fileID: 11400000, guid: 862555cc977d8ca48984ad3668486804,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cc9ae499a9987f4998d347c79341c66, type: 3}
 --- !u!4 &912976481 stripped
@@ -305,7 +311,7 @@ PrefabInstance:
     - target: {fileID: 5639288886366125788, guid: 5cc9ae499a9987f4998d347c79341c66,
         type: 3}
       propertyPath: m_Name
-      value: NoteSkin (3)
+      value: NoteSkin3
       objectReference: {fileID: 0}
     - target: {fileID: 5639288886366125787, guid: 5cc9ae499a9987f4998d347c79341c66,
         type: 3}
@@ -373,6 +379,12 @@ PrefabInstance:
       propertyPath: _noteNumber
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2260257303478003534, guid: 5cc9ae499a9987f4998d347c79341c66,
+        type: 3}
+      propertyPath: _notesList
+      value: 
+      objectReference: {fileID: 11400000, guid: 862555cc977d8ca48984ad3668486804,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cc9ae499a9987f4998d347c79341c66, type: 3}
 --- !u!1 &1062800693
@@ -515,7 +527,7 @@ PrefabInstance:
     - target: {fileID: 5639288886366125788, guid: 5cc9ae499a9987f4998d347c79341c66,
         type: 3}
       propertyPath: m_Name
-      value: NoteSkin (1)
+      value: NoteSkin1
       objectReference: {fileID: 0}
     - target: {fileID: 5639288886366125787, guid: 5cc9ae499a9987f4998d347c79341c66,
         type: 3}
@@ -583,6 +595,12 @@ PrefabInstance:
       propertyPath: _noteNumber
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2260257303478003534, guid: 5cc9ae499a9987f4998d347c79341c66,
+        type: 3}
+      propertyPath: _notesList
+      value: 
+      objectReference: {fileID: 11400000, guid: 862555cc977d8ca48984ad3668486804,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cc9ae499a9987f4998d347c79341c66, type: 3}
 --- !u!1 &1972595219
@@ -614,7 +632,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8fb0d343c3b44e4db9e51f9eaf288de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _notesList: {fileID: 11400000, guid: 862555cc977d8ca48984ad3668486804, type: 2}
   _playerNotes: {fileID: 11400000, guid: 4753f738be9fbe047adc1a1476f83a48, type: 2}
 --- !u!4 &1972595221
 Transform:

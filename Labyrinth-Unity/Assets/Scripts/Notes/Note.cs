@@ -12,7 +12,6 @@ public class Note : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Записка подобрана");
             _playerNotes.AddFoundNote(_noteNumber);
             Destroy(gameObject);
         }

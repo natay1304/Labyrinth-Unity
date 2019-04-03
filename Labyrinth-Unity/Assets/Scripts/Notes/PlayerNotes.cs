@@ -24,12 +24,6 @@ public class PlayerNotes : ScriptableObject
             {
                 _foundNotesNombers.Add(Int32.Parse(loadedString[i]));
             }
-
-            Debug.Log("Записки загружены: " + loadedString.Length);
-        }
-        else
-        {
-            Debug.Log("Записок не сохранено");
         }
     }
 
@@ -44,8 +38,6 @@ public class PlayerNotes : ScriptableObject
         loadString = loadString.Remove(loadString.Length - 1);
 
         PlayerPrefs.SetString("FoundNotes", loadString);
-
-        Debug.Log("Записки сохранены");
     }
 
     public void AddFoundNote(int noteNumber)
@@ -54,7 +46,6 @@ public class PlayerNotes : ScriptableObject
         {
             if (_foundNotesNombers[i] == noteNumber)
             {
-                Debug.Log("Такая записка уже есть");
                 return;
             }  
         }
@@ -77,6 +68,5 @@ public class PlayerNotes : ScriptableObject
     public void ClearFoundNotes()
     {
         _foundNotesNombers.Clear();
-        PlayerPrefs.DeleteKey("FoundNotes");
     }
 }

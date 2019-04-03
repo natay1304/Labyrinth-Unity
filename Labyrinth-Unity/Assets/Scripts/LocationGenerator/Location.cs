@@ -5,7 +5,7 @@ namespace LabyrinthUnity.LocationGenerator
     public class Location : MonoBehaviour
     {
         [SerializeField]
-        private Vector3 _cellSize = new Vector3(3,3,3);
+        private Vector3 _cellSize = new Vector3(3,3,6);
         public Vector3 CellSize { get => _cellSize; set => _cellSize = value; }
 
         public LocationLib LocationLib;

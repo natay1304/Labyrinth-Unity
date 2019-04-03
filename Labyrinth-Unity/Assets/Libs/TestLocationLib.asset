@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6422b945475a654aae6e2db5b73608e, type: 3}
   m_Name: TestLocationLib
   m_EditorClassIdentifier: 
-  _blocksOrderByIds: []
-  _player: {fileID: 0}
+  _blocksOrderByIds:
+  - {fileID: 1190081207080467637, guid: dc2046acb9d7e044fa92488aa914370e, type: 3}
+  - {fileID: 4088295921129543394, guid: 4ac57e811b52d574da1ab14a9f4997a8, type: 3}
+  - {fileID: 6673827471429929324, guid: 2e7f3e28d29e2ad4da2721cb0a578f31, type: 3}
+  - {fileID: 9156841541052837894, guid: 6ca663b7b2871014b94aa6848572e93e, type: 3}

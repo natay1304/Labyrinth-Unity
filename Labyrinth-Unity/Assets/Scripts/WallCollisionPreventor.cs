@@ -4,23 +4,19 @@ using UnityEngine;
 
 public class WallCollisionPreventor : MonoBehaviour
 {
-    [SerializeField]
-    private Transform _avoidable;
-    [SerializeField]
-    private float _offset = 0.1f;
-    private float _padding = 0.3f;
-    void Start()
-    {
+    [SerializeField] private Transform _avoidable;
+    [SerializeField] private float _avoidDistance = 0.3f;
+    [SerializeField] private float _raycastOriginOffset = 0.5f;
+    [SerializeField] private LayerMask _collisionMask;
 
-    }
-
-    void Update()
+    private void Update()
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position - transform.up * _padding, _avoidable.up * _padding, out hit, _offset + _padding))
+        if (Physics.Raycast(
+            transform.position - transform.up * _raycastOriginOffset, _avoidable.up * _raycastOriginOffset, out hit, _avoidDistance + _raycastOriginOffset, _collisionMask.value))
         {
-            _avoidable.localPosition = (hit.distance - _offset - _padding) * Vector3.up;
+            _avoidable.localPosition = (hit.distance - _avoidDistance - _raycastOriginOffset) * Vector3.up;
         }
         else
         {

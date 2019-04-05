@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8799786444848123958}
   - component: {fileID: 3751224241898228921}
   - component: {fileID: 4163941581302940705}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Kafel_wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,14 +13,41 @@ public class WallCollisionPreventor : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(
-            transform.position - transform.up * _raycastOriginOffset, _avoidable.up * _raycastOriginOffset, out hit, _avoidDistance + _raycastOriginOffset, _collisionMask.value))
+        if (HasItemDipping(out hit))
         {
-            _avoidable.localPosition = (hit.distance - _avoidDistance - _raycastOriginOffset) * Vector3.up;
+            PullItem(GetItemDippingLevel(hit));
         }
         else
         {
             _avoidable.localPosition = Vector3.zero;
         }
+    }
+
+    private void PullItem(float dippingLevel)
+    {
+        _avoidable.localPosition = dippingLevel * Vector3.up;
+    }
+
+    private float GetItemDippingLevel(RaycastHit hit)
+    {
+        return (hit.distance - _avoidDistance - _raycastOriginOffset);
+    }
+
+    private bool HasItemDipping(out RaycastHit hit)
+    {
+        return Physics.Raycast(GetHandPivot(), GetHandDirection(), out hit, GetHandItemLength(), _collisionMask.value);
+    }
+
+    private Vector3 GetHandPivot()
+    {
+        return transform.position - transform.up * _raycastOriginOffset;
+    }
+    private Vector3 GetHandDirection()
+    {
+        return _avoidable.up * _raycastOriginOffset;
+    }
+    private float GetHandItemLength()
+    {
+        return _avoidDistance + _raycastOriginOffset;
     }
 }

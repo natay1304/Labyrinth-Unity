@@ -5,25 +5,25 @@ using UnityEngine;
 public class TransformShaker : MonoBehaviour
 {
     public Transform _web;
-    private void Start()
-    {
-        Shake(_web, 100f, 0.05f);
-    }
 
-    public void Shake(Transform toShake, float timeSpan = 1f, float shakeIntensivity = 0.1f, float deltaTime = 0.1f)
+
+    public void Shake(Transform toShake, float timeSpan = 1f, float shakeIntensivity = 0.1f)
     {
-        StartCoroutine(ShakeCoroutines(toShake, timeSpan, shakeIntensivity, deltaTime));
+        StartCoroutine(ShakeCoroutines(toShake, timeSpan, shakeIntensivity));
     }
     
-    private IEnumerator ShakeCoroutines(Transform toShake, float timeSpan, float shakeIntensivity, float deltaTime)
+    private IEnumerator ShakeCoroutines(Transform toShake, float timeSpan, float shakeIntensivity)
     {
-        float timer = timeSpan;
         Vector3 startPosition = toShake.position;
-        while(timer > 0)
+        float timer = timeSpan;
+        Vector3 offset = Vector3.zero;
+        while (timer > 0)
         {
-            toShake.position = startPosition + Random.insideUnitSphere * shakeIntensivity;
-            timer -= deltaTime;
-            yield return new WaitForSeconds(deltaTime);
+            if (Random.value < 0.2f)
+                offset = Random.insideUnitSphere * shakeIntensivity;
+            toShake.position = Vector3.Lerp(toShake.position, startPosition + offset, 0.5f);
+            timer -= Time.deltaTime;
+            yield return null;
         }
         toShake.position = startPosition;
     }

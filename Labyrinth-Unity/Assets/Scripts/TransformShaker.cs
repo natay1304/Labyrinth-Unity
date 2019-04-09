@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TransformShaker : MonoBehaviour
-{
-    public Transform _web;
-
+{   
+    public void Shake(TrapAlarmZone trap)
+    {
+        Shake(trap.transform, 0.8f, 0.04f);
+    }
 
     public void Shake(Transform toShake, float timeSpan = 1f, float shakeIntensivity = 0.1f)
     {
@@ -19,7 +21,7 @@ public class TransformShaker : MonoBehaviour
         Vector3 offset = Vector3.zero;
         while (timer > 0)
         {
-            if (Random.value < 0.2f)
+            if (Random.value < 1f)
                 offset = Random.insideUnitSphere * shakeIntensivity;
             toShake.position = Vector3.Lerp(toShake.position, startPosition + offset, 0.5f);
             timer -= Time.deltaTime;

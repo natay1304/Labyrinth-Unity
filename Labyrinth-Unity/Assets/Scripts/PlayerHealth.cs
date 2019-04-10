@@ -17,7 +17,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void RegenerationUpdate()
     {
-        if(_regenerate == true && _isAlive == false)
+        if(_regenerate == true && _isAlive == true)
         {
             _health += _unitHealth;
             if(_health > _maxHealth)

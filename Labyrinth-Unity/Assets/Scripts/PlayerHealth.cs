@@ -4,23 +4,31 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public float Health { get => _health; }
+    public bool IsAlive { get => _health > 0; }
+
+    [SerializeField] private float _maxHealth = 100;
     private float _health;
     private bool _regenerate = false;
-    private bool _isAlive = true;
-    private readonly int _maxHealth = 100;
-    private int _unitHealth = 1;
+    private float _regeneraionUnit = 0.01f;
+    private float _regenerationDelay = 2f;
+
+    private void OnValidate()
+    {
+        _maxHealth = (_maxHealth < 0) ? 0 : _maxHealth;
+    }
+
     private void Start()
     {
         _health = _maxHealth;
-        InvokeRepeating("HealthUpdate", 1, 2);
     }
 
-    private void RegenerationUpdate()
+    private void Update()
     {
-        if(_regenerate == true && _isAlive == true)
+        if (_regenerate)
         {
-            _health += _unitHealth;
-            if(_health > _maxHealth)
+            _health += _regeneraionUnit;
+            if (_health > _maxHealth)
             {
                 _health = _maxHealth;
                 _regenerate = false;
@@ -32,21 +40,22 @@ public class PlayerHealth : MonoBehaviour
     {
         _health -= damage;
 
-        if(_health < 0)
+        if (_health < 0)
         {
             _health = 0;
-            _isAlive = false;
-        } else
+            _regenerate = false;
+        }
+        else
         {
             StartCoroutine(DelayRegenerationCoroutine());
-        }   
-
+        }
     }
 
     private IEnumerator DelayRegenerationCoroutine()
     {
-        _regenerate = false;       
-        yield return new WaitForSeconds(1);
+        StopAllCoroutines();
+        _regenerate = false;
+        yield return new WaitForSeconds(_regenerationDelay);
         _regenerate = true;
     }
 }

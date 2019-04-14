@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class TrapAlarmZoneEvent : UnityEvent<TrapAlarmZone> {}
+public class TrapAlarmZoneEvent : UnityEvent<GameObject, Collider> {}
 
 public class TrapAlarmZone : MonoBehaviour
 {
@@ -12,6 +12,6 @@ public class TrapAlarmZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        TriggerEvent.Invoke(this);
+        TriggerEvent.Invoke(gameObject, other);
     }
 }

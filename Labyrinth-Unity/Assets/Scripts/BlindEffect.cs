@@ -13,9 +13,10 @@ public class BlindEffect : MonoBehaviour
         _blinder = GetComponent<PostProcessVolume>();
     }
 
-    public void Blind(float time = 4f)
+    public void Blind(GameObject zone, Collider other)
     {
-        StartCoroutine(BlindCoroutine(time));
+        if (other.CompareTag("Player"))
+            StartCoroutine(BlindCoroutine(4f));
     }
 
     private IEnumerator BlindCoroutine(float time)

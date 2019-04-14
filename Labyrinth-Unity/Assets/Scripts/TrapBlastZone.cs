@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[System.Serializable]
+public class TrapBlastZoneEvent : UnityEvent<GameObject, Collider> {}
+
 public class TrapBlastZone : MonoBehaviour
 {
-    public UnityEvent TriggerEvent;
+    public TrapBlastZoneEvent TriggerEvent;
     
     private void OnTriggerEnter(Collider other)
     {
-        TriggerEvent.Invoke();
+        TriggerEvent.Invoke(gameObject, other);
     }
 }

@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class TransformShaker : MonoBehaviour
 {   
-    public void Shake(TrapAlarmZone trap)
+    public void Shake(GameObject trap, Collider player)
     {
-        Shake(trap.transform, 0.8f, 0.04f);
+        if(player.CompareTag("Player"))
+            Shake(trap.transform, 0.8f, 0.04f);
     }
 
     public void Shake(Transform toShake, float timeSpan = 1f, float shakeIntensivity = 0.1f)

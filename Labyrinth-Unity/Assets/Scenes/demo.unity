@@ -10059,93 +10059,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4dec30cc43815a14ab36e462e57a8ddd, type: 3}
---- !u!1 &915373308
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 915373312}
-  - component: {fileID: 915373311}
-  - component: {fileID: 915373310}
-  - component: {fileID: 915373309}
-  m_Layer: 0
-  m_Name: Ghost Zone
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &915373309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915373308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 536cb65d27fec8745b519760255c816f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ghostPrefab: {fileID: 998364782, guid: fe746c5eaa3d4f74c97002cb6e595264, type: 3}
---- !u!114 &915373310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915373308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2083f5bf5bdfa184a9d04e10c4d6a71f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 915373309}
-        m_MethodName: SpawnGhost
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: TrapAlarmZoneEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
---- !u!65 &915373311
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915373308}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4, y: 1, z: 4}
-  m_Center: {x: 0, y: 0.5, z: 0}
---- !u!4 &915373312
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915373308}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.516955, y: 2.57, z: -24.836807}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &922492318
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23162,6 +23075,75 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4dec30cc43815a14ab36e462e57a8ddd, type: 3}
+--- !u!1001 &1290986778366540900
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1290986779080130712, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_Name
+      value: Ghost Zone
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 14.516955
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -24.836807
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290986779080130916, guid: 9d7466b9f6d8d844685d578069628fba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9d7466b9f6d8d844685d578069628fba, type: 3}
 --- !u!1001 &3922693053979231000
 PrefabInstance:
   m_ObjectHideFlags: 0
